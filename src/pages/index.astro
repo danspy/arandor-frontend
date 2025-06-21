@@ -1,11 +1,48 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const res = await fetch('http://localhost:8000/arandor-api/pages/home');
+const { data } = await res.json();
+
+console.log(data.accordion);
+
+// Parse the YAML accordion content
+// @ts-ignore
+import yaml from 'js-yaml';
+const accordion = yaml.load(data.accordion);
 ---
 
 <Layout>
-	<Welcome />
+
+
+	<h1>{data.title}</h1>
+      <p>{data.text}</p>
+
+      <h2>Level</h2>
+      <p>Aktuelles Level: {data.currentlevel}</p>
+      <p>Nächstes Level: {data.nextlevel}</p>
+      <progress value={data.levelprogress} max="100">{data.levelprogress}%</progress>
+
+      <h2>Regionen</h2>
+      <ul>
+        <li>Rulik: {data.rulikselect} ({data.rulikprogress}%)</li>
+        <li>Irileth: {data.irilethselect} ({data.irilethprogress}%)</li>
+        <li>Mardunien: {data.mardunienselect} ({data.mardunienprogress}%)</li>
+        <li>Sianische Lande: {data.sianischelandeselect} ({data.sianischelandeprogress}%)</li>
+        <li>Regusanien: {data.regusanienselect} ({data.regusanienprogress}%)</li>
+        <li>Kongdonien: {data.kongdonienselect} ({data.kongdonienprogress}%)</li>
+      </ul>
+
+      <h2>Quests</h2>
+      <ul>
+        {accordion.map((quest: { title: unknown; questcontent: unknown; queststatusselect: unknown; }, index: any) => (
+          <li>
+            <details>
+              <summary>{quest.title}</summary>
+              <p>{quest.questcontent}</p>
+              <p>Status: {quest.queststatusselect}</p>
+            </details>
+          </li>
+        ))}
+      </ul>
 </Layout>

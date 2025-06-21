@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../arandor-app"
+		}
+	],
+	"settings": {
+		"nuxt.isNuxtApp": false
+	}
+}
